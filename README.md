@@ -1,13 +1,19 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Rose Rocket
 
-## Available Scripts
+Tech Challenge
 
-In the project directory, you can run:
+## Setup Instructions
 
-### `npm run dev`
+1.Fork and clone this repo
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+git clone git@github.com/{yourUsername}/Rose-Rocket/.git
+cd Rose-Rocket
+```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+2.Install all server dependencies `npm i`
+3.Install all client dependencies `cd client && npm i && cd ..`
+3.Start the app (development mode) by running `npm run dev`
+4.Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Dependencies

@@ -1,8 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Route, Switch} from 'react-router-dom';
+import logo from '../logo.svg';
+import '../styles/App.css';
+
+import Home from './Home';
+import Legs from './Legs';
+import Stops from './Stops';
+import Driver from './Driver';
+import BonusDriver from './BonusDriver';
 
 class App extends Component {
+  render() {
+    const App = () => (
+      <div>
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/legs' component={Legs} />
+          <Route path='/stops' component={Stops} />
+          <Route path='/driver' component={Driver} />
+          <Route path='/bonusdriver' component={BonusDriver} />
+        </Switch>
+      </div>
+    )
+    return (
+      <Switch>
+        <App />
+      </Switch>
+    );
+  }
+}
+
+/* class App extends Component {
   state = {
     response: '',
     post: '',
@@ -67,6 +95,6 @@ class App extends Component {
       </div>
     );
   }
-}
+} */
 
 export default App;
