@@ -1,0 +1,25 @@
+header {
+  background-color: black;
+  height: 100px;
+
+  h1 {
+    color: white;
+    font-size: 3.2rem;
+  }
+}
+footer {
+  background-color: #5090E2;
+  height: 100px;
+}
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
+.logo {
+  height: 40px;
+}
+.green {
+  color: #5EB7A9;
+}

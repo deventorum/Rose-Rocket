@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {Route, Switch} from 'react-router-dom';
-import logo from '../logo.svg';
-import '../styles/App.css';
 
 import Home from './Home';
 import Legs from './Legs';
@@ -23,9 +21,22 @@ class App extends Component {
       </div>
     )
     return (
-      <Switch>
-        <App />
-      </Switch>
+      <div className='app'>
+        <header>
+          <div className='wrapper'>
+            <h1><span className='green'>rose</span>rocket</h1>
+            <h1><span className='green'>tech</span>challenge</h1>
+          </div>
+        </header>
+          <Switch>
+            <App />
+          </Switch>
+        <footer>
+          <div className='wrapper'>
+            <p>Copyright © 2019 Lorem ipsum</p>
+          </div>
+        </footer>
+      </div>
     );
   }
 }
