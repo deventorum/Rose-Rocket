@@ -5,20 +5,29 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const legsData = require('./data-files/legs.json');
+const stopsData = require('./data-files/stops.json');
+const driverLocation = require('./data-files/driver-location.json');
+
 app.get('/', (req, res) => {
 	res.send({ express: 'Root' });
 });
 
 app.get('/legs/', (req, res) => {
-	res.send({ express: 'Legs' });
+	res.send(legsData);
 });
 
 app.get('/stops/', (req, res) => {
-	res.send({ express: 'Stops' });
+	res.send(stopsData);
 });
 
 app.get('/driver/', (req, res) => {
-	res.send({ express: 'Driver' });
+	const data = {
+		legsData,
+		stopsData,
+		driverLocation
+	};
+	res.send(data);
 });
 
 app.post('/driver/', (req, res) => {

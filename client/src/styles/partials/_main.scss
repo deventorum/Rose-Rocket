@@ -7,8 +7,22 @@ header {
     font-size: 3.2rem;
   }
 }
+h1 {
+  text-align: center;
+  padding: 10px 0;
+}
+table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid $blue;
+  border-collapse: collapse;
+  padding: 5px 10px;
+}
 footer {
-  background-color: #5090E2;
+  background-color: $blue;
   height: 100px;
 }
 .app {
@@ -21,5 +35,5 @@ footer {
   height: 40px;
 }
 .green {
-  color: #5EB7A9;
+  color: $green;
 }

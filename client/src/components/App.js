@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Link} from 'react-router-dom';
 
 import Home from './Home';
 import Legs from './Legs';
@@ -24,13 +24,17 @@ class App extends Component {
       <div className='app'>
         <header>
           <div className='wrapper'>
-            <h1><span className='green'>rose</span>rocket</h1>
-            <h1><span className='green'>tech</span>challenge</h1>
+            <Link to='/'><h1><span className='green'>rose</span>rocket</h1></Link>
+            <Link to='/'><h1><span className='green'>tech</span>challenge</h1></Link>
           </div>
         </header>
-          <Switch>
-            <App />
-          </Switch>
+        <main>
+          <div className='wrapper'>
+            <Switch>
+              <App />
+            </Switch>
+          </div>
+        </main>
         <footer>
           <div className='wrapper'>
             <p>Copyright © 2019 Lorem ipsum</p>
