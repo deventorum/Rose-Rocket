@@ -4,12 +4,12 @@ header {
 
   h1 {
     color: white;
-    font-size: 3.2rem;
+    font-size: 2.5rem;
   }
 }
-h1 {
+h2 {
   text-align: center;
-  padding: 10px 0;
+  padding: 20px 0;
 }
 table {
   border: 2px solid black;
@@ -25,6 +25,56 @@ footer {
   background-color: $blue;
   height: 100px;
 }
+.home {
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
+  min-height: 500px;
+
+  h2 a {
+    color: $blue;
+    transition: $trans;
+
+    &:hover {
+      color: black;
+    }
+  }
+}
+.welcome {
+  display: flex;
+  align-items: center;
+
+  h1 {
+    font-size: 3rem;
+    font-style: italic;
+    margin-right: 15px;
+    color: $green;
+  }
+}
+.rocket {
+  width: 100px;
+  height: 100px;
+}
+.nav-main {
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    li {
+      padding: 5px 10px;
+    }
+  }
+  a {
+    color: white;
+    transition: $trans;
+    font-size: 1.2rem;
+
+    &:hover {
+      color: $green;
+    }
+  }
+}
 .app {
   display: flex;
   flex-direction: column;
@@ -36,4 +86,18 @@ footer {
 }
 .green {
   color: $green;
+}
+.legs {
+  text-align: center;
+  h3 {
+    margin-top: 20px;
+  }
+  a {
+    color: $blue;
+    transition: $trans;
+    
+    &:hover {
+      color: black;
+    }
+  }
 }

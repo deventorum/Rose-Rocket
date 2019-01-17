@@ -24,13 +24,13 @@ class Legs extends Component {
   
   render() {
     const listOfLegs = 
-    // Displays all legs from database
+    // Displays all legs from the database
     this.state.legsData.map(leg => (
       <Leg leg={leg} key={leg.legID}/>
     ))
     return (
       <div className="legs">
-        <h1>List of existing legs</h1>
+        <h2>List of existing legs</h2>
         <table>
           <tbody>
             <tr>
@@ -42,6 +42,7 @@ class Legs extends Component {
             {listOfLegs}
           </tbody>
         </table>
+        <h3><Link to='/stops/'>Check location of the stops</Link></h3>
       </div>
     )
   }

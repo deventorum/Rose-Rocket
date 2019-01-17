@@ -288,12 +288,12 @@ header {
 
 header h1 {
   color: white;
-  font-size: 3.2rem;
+  font-size: 2.5rem;
 }
 
-h1 {
+h2 {
   text-align: center;
-  padding: 10px 0;
+  padding: 20px 0;
 }
 
 table {
@@ -311,6 +311,77 @@ td {
 footer {
   background-color: #5090E2;
   height: 100px;
+}
+
+.home {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  min-height: 500px;
+}
+
+.home h2 a {
+  color: #5090E2;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+
+.home h2 a:hover {
+  color: black;
+}
+
+.welcome {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.welcome h1 {
+  font-size: 3rem;
+  font-style: italic;
+  margin-right: 15px;
+  color: #5EB7A9;
+}
+
+.rocket {
+  width: 100px;
+  height: 100px;
+}
+
+.nav-main ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.nav-main ul li {
+  padding: 5px 10px;
+}
+
+.nav-main a {
+  color: white;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  font-size: 1.2rem;
+}
+
+.nav-main a:hover {
+  color: #5EB7A9;
 }
 
 .app {
@@ -333,5 +404,23 @@ footer {
 
 .green {
   color: #5EB7A9;
+}
+
+.legs {
+  text-align: center;
+}
+
+.legs h3 {
+  margin-top: 20px;
+}
+
+.legs a {
+  color: #5090E2;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+
+.legs a:hover {
+  color: black;
 }
 /*# sourceMappingURL=layout.css.map */
