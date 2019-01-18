@@ -299,6 +299,7 @@ h2 {
 table {
   border: 2px solid black;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 th,
@@ -417,21 +418,25 @@ canvas:hover {
   color: #5EB7A9;
 }
 
-.legs {
+.legs,
+.stops {
   text-align: center;
 }
 
-.legs h3 {
-  margin-top: 20px;
+.legs h3,
+.stops h3 {
+  margin-bottom: 20px;
 }
 
-.legs a {
+.legs a,
+.stops a {
   color: #5090E2;
   -webkit-transition: all linear 0.25s;
   transition: all linear 0.25s;
 }
 
-.legs a:hover {
+.legs a:hover,
+.stops a:hover {
   color: black;
 }
 /*# sourceMappingURL=layout.css.map */

@@ -5,16 +5,15 @@ import { Link } from 'react-router-dom';
 class Stops extends Component {
   state = {
     sizeMultiplier: 6,
-    legsData: [],
     stopsData: []
   };
   componentDidMount() {
     this.callApi()
       .then(res => {
         this.setState({
-          legsData: res.legsData,
-          stopsData: res.stopsData
+          stopsData: res
          })
+        this.displayLegs();
         this.displayStops();
       })
       .catch(err => console.log(err));
@@ -53,14 +52,32 @@ class Stops extends Component {
     });
   }
   displayLegs() {
-    
+    // iterates through all stops except last one
+    for (let i = 0; i < this.state.stopsData.length - 1; i++) {
+      this.drawLeg(this.state.stopsData[i], this.state.stopsData[i + 1]);
+    }
+  }
+
+  drawLeg(stop1, stop2) {
+    const mult = this.state.sizeMultiplier;
+    const xCor1 = stop1.x * mult;
+    const xCor2 = stop2.x * mult;
+    const yCor1 = stop1.y * mult;
+    const yCor2 = stop2.y * mult;
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.moveTo(xCor1, yCor1);
+    ctx.lineTo(xCor2, yCor2);
+    ctx.strokeStyle = '#5090E2'
+    ctx.stroke();
+    // I like how you arranged the stops :))
   }
 
 
   render() {
     return (
-      <div className="Stops">
+      <div className="stops">
         <canvas ref="canvas" width={800} height={800} />
+        <h3><Link to='/driver/'>Find your driver</Link></h3>
       </div>
     )
   }

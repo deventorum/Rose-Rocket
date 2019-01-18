@@ -18,11 +18,7 @@ app.get('/legs/', (req, res) => {
 });
 
 app.get('/stops/', (req, res) => {
-	const data = {
-		legsData,
-		stopsData
-	};
-	res.send(data);
+	res.send(stopsData);
 });
 
 app.get('/driver/', (req, res) => {

@@ -14,6 +14,7 @@ h2 {
 table {
   border: 2px solid black;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 th,
 td {
@@ -96,10 +97,11 @@ canvas {
 .green {
   color: $green;
 }
-.legs {
+.legs,
+.stops {
   text-align: center;
   h3 {
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
   a {
     color: $blue;
