@@ -313,6 +313,17 @@ footer {
   height: 100px;
 }
 
+canvas {
+  border: 2px solid #5EB7A9;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  margin: 20px;
+}
+
+canvas:hover {
+  border-color: #5090E2;
+}
+
 .home {
   display: -webkit-box;
   display: -ms-flexbox;

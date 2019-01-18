@@ -25,6 +25,15 @@ footer {
   background-color: $blue;
   height: 100px;
 }
+canvas {
+  border: 2px solid $green;
+  transition: $trans;
+  margin: 20px;
+
+  &:hover {
+    border-color: $blue;
+  }
+}
 .home {
   display:flex;
   flex-direction: column;
@@ -95,7 +104,7 @@ footer {
   a {
     color: $blue;
     transition: $trans;
-    
+
     &:hover {
       color: black;
     }

@@ -18,7 +18,11 @@ app.get('/legs/', (req, res) => {
 });
 
 app.get('/stops/', (req, res) => {
-	res.send(stopsData);
+	const data = {
+		legsData,
+		stopsData
+	};
+	res.send(data);
 });
 
 app.get('/driver/', (req, res) => {
@@ -30,10 +34,10 @@ app.get('/driver/', (req, res) => {
 	res.send(data);
 });
 
-app.post('/driver/', (req, res) => {
+app.put('/driver/', (req, res) => {
 	console.log(req.body);
 	res.send(
-		`I received your POST request. This is what you sent me: ${req.body.post}`,
+		`I received your PUT request. This is what you sent me: ${req.body}`,
 	);
 });
 
