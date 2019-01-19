@@ -16,14 +16,24 @@ class Canvas extends Component {
     });
   }
   componentDidUpdate() {
-    this.displayLegs();
-    this.displayStops();
+    this.displayLegs(this.state.stopsData, '#5090E2', 1);
     if (this.state.driverLocation){
+      let relevantStops;
+      const lastStop = this.getLastStop(this.state.driverLocation[0]);
+      this.state.stopsData.forEach((stop, index) => {
+        if (stop.name === lastStop) {
+          relevantStops = this.state.stopsData.slice(index);
+        }
+      })
+      // only shows last stop driver visited and stops he is going to visit
+      this.displayStops(relevantStops);
       this.displayDriver(this.state.driverLocation[0]);
+    } else {
+      this.displayStops(this.state.stopsData);
     }
   }
   drawStop(obj, sameStop) {
-    // sizeMultiplier is used to adjust stop location on a canvas that's bigger than 200x200
+    // sizeMultiplier is used to scale stop locations according to canvas size
     const xCor = obj.x * this.state.sizeMultiplier;
     const yCor = obj.y * this.state.sizeMultiplier;
     const { name } = obj;
@@ -38,9 +48,9 @@ class Canvas extends Component {
     // Position text so it doesn't overlap with other text
     !sameStop ? ctx.fillText(name, xCor + 12, yCor - 12) : ctx.fillText(name, xCor - 22, yCor - 12)
   }
-  displayStops() {
-    this.state.stopsData.forEach((stop, index) => {
-      if (index !== this.state.stopsData.length - 1) {
+  displayStops(arr) {
+    arr.forEach((stop, index) => {
+      if (index !== arr.length - 1) {
         this.drawStop(stop, false);
       }
       // checks if the first stop (A) is the same as the last stop (L) on the way, so the stop names don't overlap. Ideally, you want to check it for all stops, but for simplicity sake I'm just checking last one and first one, which are the same in the given dataset.
@@ -49,14 +59,14 @@ class Canvas extends Component {
       }
     });
   }
-  displayLegs() {
+  displayLegs(arr, color, lineWidth) {
     // iterates through all stops except last one
-    for (let i = 0; i < this.state.stopsData.length - 1; i++) {
-      this.drawLeg(this.state.stopsData[i], this.state.stopsData[i + 1]);
+    for (let i = 0; i < arr.length - 1; i++) {
+      this.drawLeg(arr[i], arr[i + 1], color, lineWidth);
     }
   }
 
-  drawLeg(stop1, stop2) {
+  drawLeg(stop1, stop2, color, lineWidth) {
     const mult = this.state.sizeMultiplier;
     const xCor1 = stop1.x * mult;
     const xCor2 = stop2.x * mult;
@@ -65,17 +75,13 @@ class Canvas extends Component {
     const ctx = this.refs.canvas.getContext('2d');
     ctx.moveTo(xCor1, yCor1);
     ctx.lineTo(xCor2, yCor2);
-    ctx.strokeStyle = '#5090E2'
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
     ctx.stroke();
     // I like how you arranged the stops :))
   }
   displayDriver (driver) {
-    let driverStop;
-    this.state.legsData.forEach(leg => {
-      if (leg.legID === driver.activeLegID) {
-        driverStop = leg.startStop;
-      }
-    })
+    let driverStop = this.getLastStop(driver);
     let xCor1;
     let xCor2;
     let yCor1;
@@ -100,6 +106,50 @@ class Canvas extends Component {
     ctx.font = '15px serif';
     ctx.fillStyle = '#5090E2';
     ctx.fillText('Driver', xDriver + 5, yDriver - 10);
+    // renders a completed section of the route
+    this.pathCompleted(xDriver, yDriver, driverStop)
+  }
+
+  getLastStop(driver) {
+    let driverStop;
+    this.state.legsData.forEach(leg => {
+      if (leg.legID === driver.activeLegID) {
+        driverStop = leg.startStop;
+      }
+    })
+    return driverStop
+  }
+
+  pathCompleted(xDriver, yDriver, lastStop) {
+    let completedStops;
+    const currentLocation = {
+      x: xDriver / this.state.sizeMultiplier,
+      y: yDriver / this.state.sizeMultiplier
+    }
+    this.state.stopsData.forEach((stop, index) => {
+      if (stop.name === lastStop) {
+        // creates a new array of completed stops (doesn't include drivers between-stops location)
+        completedStops = this.state.stopsData.slice(0, index + 1);
+      }
+    })
+    // appends pseudo-stop (drivers exact location) to the array
+    completedStops.push(currentLocation);
+    const color = '#C85E5E';
+    const lineWidth = 3;
+    this.displayLegs(completedStops, color, lineWidth);
+    // shows user how completed section looks
+    this.showLegend(color, lineWidth)
+  }
+  showLegend(color, lineWidth) {
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.moveTo(5 * this.state.sizeMultiplier, 125 * this.state.sizeMultiplier);
+    ctx.lineTo(15 * this.state.sizeMultiplier, 125 * this.state.sizeMultiplier);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.stroke();
+    ctx.font = '15px serif';
+    ctx.fillStyle = color;
+    ctx.fillText('Completed section', 16 * this.state.sizeMultiplier, 126 * this.state.sizeMultiplier);
   }
 
   render() {
