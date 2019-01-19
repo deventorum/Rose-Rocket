@@ -15,8 +15,8 @@ class Driver extends Component {
       .then(res => {
         this.setState({
           stopsData: res.stopsData,
-          legsData: [],
-          driverLocation: {}
+          legsData: res.legsData,
+          driverLocation: res.driverLocation
         })
       })
       .catch(err => console.log(err));

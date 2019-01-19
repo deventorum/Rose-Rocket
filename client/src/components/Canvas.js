@@ -19,7 +19,7 @@ class Canvas extends Component {
     this.displayLegs();
     this.displayStops();
     if (this.state.driverLocation){
-      this.displayDriver();
+      this.displayDriver(this.state.driverLocation[0]);
     }
   }
   drawStop(obj, sameStop) {
@@ -69,8 +69,37 @@ class Canvas extends Component {
     ctx.stroke();
     // I like how you arranged the stops :))
   }
-  displayDriver () {
-    
+  displayDriver (driver) {
+    let driverStop;
+    this.state.legsData.forEach(leg => {
+      if (leg.legID === driver.activeLegID) {
+        driverStop = leg.startStop;
+      }
+    })
+    let xCor1;
+    let xCor2;
+    let yCor1;
+    let yCor2;
+    this.state.stopsData.forEach((stop, index) => {
+      if (driverStop === stop.name) {
+        xCor1 = stop.x;
+        yCor1 = stop.y;
+        xCor2 = this.state.stopsData[index + 1].x
+        yCor2 = this.state.stopsData[index + 1].y
+      }
+    })
+    // Finds new x and y coordinates based on the two other data points and percentage completed
+    const xDriver = (xCor1 + (xCor2 - xCor1) * driver.legProgress / 100) * this.state.sizeMultiplier;
+    const yDriver = (yCor1 + (yCor2 - yCor1) * driver.legProgress / 100) * this.state.sizeMultiplier;
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(xDriver, yDriver, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = '#5090E2';
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = '15px serif';
+    ctx.fillStyle = '#5090E2';
+    ctx.fillText('Driver', xDriver + 5, yDriver - 10);
   }
 
   render() {
