@@ -23,9 +23,9 @@ app.get('/stops/', (req, res) => {
 
 app.get('/driver/', (req, res) => {
 	const data = {
-		legsData,
-		stopsData,
-		driverLocation
+		legsData: legsData,
+		stopsData: stopsData,
+		driverLocation: driverLocation
 	};
 	res.send(data);
 });
