@@ -10,7 +10,8 @@ class Navbar extends Component {
           <li><Link to='/'>Home</Link></li>
           <li><Link to='/legs/'>Legs</Link></li>
           <li><Link to='/stops/'>Stops</Link></li>
-          <li><Link to='/driver/'>Driver Location</Link></li>
+          <li><Link to='/driver/'>Main Driver</Link></li>
+          <li><Link to='/bonusdriver/'>Bonus Driver</Link></li>
         </ul>
       </nav>
     )

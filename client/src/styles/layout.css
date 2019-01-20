@@ -418,24 +418,32 @@ canvas:hover {
 }
 
 .legs,
-.stops {
+.stops,
+.driver,
+.bonus-driver {
   text-align: center;
 }
 
 .legs h3,
-.stops h3 {
+.stops h3,
+.driver h3,
+.bonus-driver h3 {
   margin-bottom: 20px;
 }
 
 .legs a,
-.stops a {
+.stops a,
+.driver a,
+.bonus-driver a {
   color: #5090E2;
   -webkit-transition: all linear 0.25s;
   transition: all linear 0.25s;
 }
 
 .legs a:hover,
-.stops a:hover {
+.stops a:hover,
+.driver a:hover,
+.bonus-driver a:hover {
   color: black;
 }
 

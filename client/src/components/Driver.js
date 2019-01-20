@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import Canvas from './Canvas';
 
@@ -89,7 +89,7 @@ class Driver extends Component {
     const errorMessage = this.state.error ? <p className='error-message'>{this.state.error}</p> : '';
 
     return (
-      <div className="Driver">
+      <div className="driver">
         <Canvas stopsData={this.state.stopsData} legsData={this.state.legsData}driverLocation={this.state.driverLocation} updateDriver={this.updateDriver}  />
         <form onSubmit={this.handleSubmit} className='update-driver'>
           <h2>Update Driver's Location</h2>
@@ -106,6 +106,7 @@ class Driver extends Component {
           <input type='submit' value='Submit' />
           {errorMessage}
         </form>
+        <h3><Link to='/bonusdriver/'>Check second driver</Link></h3>
       </div>
     )
   }

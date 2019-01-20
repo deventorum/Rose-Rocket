@@ -12,6 +12,10 @@ const data = {
 	driverLocation: {
 		'activeLegID': 'FG',
 		'legProgress': 33
+	},
+	bonusDriverLocation: {
+		'x': 50,
+		'y': 55
 	}
 };
 // checks data validity from a client

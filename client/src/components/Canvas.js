@@ -6,13 +6,15 @@ class Canvas extends Component {
     sizeMultiplier: 6,
     stopsData: [],
     legsData: [],
-    driverLocation: {}
+    driverLocation: {},
+    bonusDriverLocation: {}
   }
   componentWillReceiveProps(props) {
     this.setState({
       stopsData: props.stopsData,
       legsData: props.legsData,
-      driverLocation: props.driverLocation
+      driverLocation: props.driverLocation,
+      bonusDriverLocation: props.bonusDriverLocation
     });
   }
   componentDidUpdate() {
@@ -32,6 +34,9 @@ class Canvas extends Component {
       // only shows last stop driver visited and stops he is going to visit
       this.displayStops(relevantStops);
       this.displayDriver(this.state.driverLocation);
+    } else if (this.state.bonusDriverLocation) {
+      console.log('Bonus');
+      this.displayBonusDriver(this.state.bonusDriverLocation)
     } else {
       this.displayStops(this.state.stopsData);
     }
@@ -69,6 +74,18 @@ class Canvas extends Component {
       this.drawLeg(arr[i], arr[i + 1], color, lineWidth);
     }
   }
+  drawDriver(xCor, yCor) {
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.arc(xCor, yCor, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = '#5090E2';
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.font = '15px serif';
+    ctx.fillStyle = '#5090E2';
+    ctx.fillText('Driver', xCor + 5, yCor - 10);
+  }
 
   drawLeg(stop1, stop2, color, lineWidth) {
     const mult = this.state.sizeMultiplier;
@@ -101,18 +118,9 @@ class Canvas extends Component {
     // Finds new x and y coordinates based on the two other data points and percentage completed
     const xDriver = (xCor1 + (xCor2 - xCor1) * driver.legProgress / 100) * this.state.sizeMultiplier;
     const yDriver = (yCor1 + (yCor2 - yCor1) * driver.legProgress / 100) * this.state.sizeMultiplier;
-    const ctx = this.refs.canvas.getContext('2d');
-    ctx.beginPath();
-    ctx.arc(xDriver, yDriver, 5, 0, 2 * Math.PI);
-    ctx.fillStyle = '#5090E2';
-    ctx.fill();
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.font = '15px serif';
-    ctx.fillStyle = '#5090E2';
-    ctx.fillText('Driver', xDriver + 5, yDriver - 10);
+    this.drawDriver(xDriver, yDriver);
     // renders a completed section of the route
-    this.pathCompleted(xDriver, yDriver, driverStop)
+    this.pathHighlight(xDriver, yDriver, driverStop, 'Completed Section')
   }
 
   getLastStop(driver) {
@@ -125,7 +133,7 @@ class Canvas extends Component {
     return driverStop
   }
 
-  pathCompleted(xDriver, yDriver, lastStop) {
+  pathHighlight(xDriver, yDriver, lastStop, text) {
     let completedStops;
     const currentLocation = {
       x: xDriver / this.state.sizeMultiplier,
@@ -143,9 +151,9 @@ class Canvas extends Component {
     const lineWidth = 3;
     this.displayLegs(completedStops, color, lineWidth);
     // shows user how completed section looks
-    this.showLegend(color, lineWidth)
+    this.showLegend(color, lineWidth, text)
   }
-  showLegend(color, lineWidth) {
+  showLegend(color, lineWidth, text) {
     const ctx = this.refs.canvas.getContext('2d');
     ctx.moveTo(5 * this.state.sizeMultiplier, 115 * this.state.sizeMultiplier);
     ctx.lineTo(15 * this.state.sizeMultiplier, 115 * this.state.sizeMultiplier);
@@ -154,7 +162,12 @@ class Canvas extends Component {
     ctx.stroke();
     ctx.font = '15px serif';
     ctx.fillStyle = color;
-    ctx.fillText('Completed section', 16 * this.state.sizeMultiplier, 116 * this.state.sizeMultiplier);
+    ctx.fillText(text, 16 * this.state.sizeMultiplier, 116 * this.state.sizeMultiplier);
+  }
+  displayBonusDriver(driver) {
+    const xDriver = driver.x * this.state.sizeMultiplier;
+    const yDriver = driver.y * this.state.sizeMultiplier;
+    this.drawDriver(xDriver, yDriver);
   }
 
   render() {
