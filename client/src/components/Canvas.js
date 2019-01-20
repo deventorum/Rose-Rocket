@@ -23,23 +23,21 @@ class Canvas extends Component {
     ctx.clearRect(0,0,800,800);
 
     this.displayLegs(this.state.stopsData, '#5090E2', 1);
+    let relevantStops;
     if (this.state.driverLocation){
-      let relevantStops;
-      const lastStop = this.getLastStop(this.state.driverLocation);
-      this.state.stopsData.forEach((stop, index) => {
-        if (stop.name === lastStop) {
-          relevantStops = this.state.stopsData.slice(index);
-        }
-      })
       // only shows last stop driver visited and stops he is going to visit
-      this.displayStops(relevantStops);
+      relevantStops = this.getStopsArray(this.state.stopsData, this.getLastStop(this.state.driverLocation));
       this.displayDriver(this.state.driverLocation);
+
     } else if (this.state.bonusDriverLocation) {
-      console.log('Bonus');
+
+      relevantStops = this.getStopsArray(this.state.stopsData, this.getClosestStop(this.state.bonusDriverLocation));
       this.displayBonusDriver(this.state.bonusDriverLocation)
+
     } else {
-      this.displayStops(this.state.stopsData);
+      relevantStops = this.state.stopsData;
     }
+    this.displayStops(relevantStops);
   }
   drawStop(obj, sameStop) {
     // sizeMultiplier is used to scale stop locations according to canvas size
@@ -48,6 +46,7 @@ class Canvas extends Component {
     const { name } = obj;
     const ctx = this.refs.canvas.getContext('2d');
     ctx.beginPath();
+    ctx.strokeStyle = 'black';
     ctx.arc(xCor, yCor, 10, 0, 2 * Math.PI);
     ctx.fillStyle = '#5EB7A9';
     ctx.fill();
@@ -120,7 +119,7 @@ class Canvas extends Component {
     const yDriver = (yCor1 + (yCor2 - yCor1) * driver.legProgress / 100) * this.state.sizeMultiplier;
     this.drawDriver(xDriver, yDriver);
     // renders a completed section of the route
-    this.pathHighlight(xDriver, yDriver, driverStop, 'Completed Section')
+    this.pathHighlight(xDriver, yDriver, driverStop, true)
   }
 
   getLastStop(driver) {
@@ -133,25 +132,36 @@ class Canvas extends Component {
     return driverStop
   }
 
-  pathHighlight(xDriver, yDriver, lastStop, text) {
-    let completedStops;
+  pathHighlight(xDriver, yDriver, highlightedStop, completedPath) {
+    let highlightedStops;
+    let displayText;
+    let color;
     const currentLocation = {
       x: xDriver / this.state.sizeMultiplier,
       y: yDriver / this.state.sizeMultiplier
     }
     this.state.stopsData.forEach((stop, index) => {
-      if (stop.name === lastStop) {
+      // renders the completed path  
+      if (stop.name === highlightedStop && completedPath) {
         // creates a new array of completed stops (doesn't include drivers between-stops location)
-        completedStops = this.state.stopsData.slice(0, index + 1);
+        highlightedStops = this.state.stopsData.slice(0, index + 1);
+        // appends pseudo-stop (drivers exact location) to the array
+        highlightedStops.push(currentLocation);
+        displayText = 'Completed Section';
+        color = '#C85E5E';
+      }
+      // renders the remaining path
+      if (stop.name === highlightedStop && !completedPath) {
+        highlightedStops = this.state.stopsData.slice(index);
+        highlightedStops.unshift(currentLocation);
+        displayText = 'Remaining Path';
+        color = '#5EB7A9';
       }
     })
-    // appends pseudo-stop (drivers exact location) to the array
-    completedStops.push(currentLocation);
-    const color = '#C85E5E';
     const lineWidth = 3;
-    this.displayLegs(completedStops, color, lineWidth);
+    this.displayLegs(highlightedStops, color, lineWidth);
     // shows user how completed section looks
-    this.showLegend(color, lineWidth, text)
+    this.showLegend(color, lineWidth, displayText)
   }
   showLegend(color, lineWidth, text) {
     const ctx = this.refs.canvas.getContext('2d');
@@ -165,9 +175,30 @@ class Canvas extends Component {
     ctx.fillText(text, 16 * this.state.sizeMultiplier, 116 * this.state.sizeMultiplier);
   }
   displayBonusDriver(driver) {
+    const closestStop = this.getClosestStop(driver);
     const xDriver = driver.x * this.state.sizeMultiplier;
     const yDriver = driver.y * this.state.sizeMultiplier;
     this.drawDriver(xDriver, yDriver);
+    this.pathHighlight(xDriver, yDriver, closestStop, false);
+  }
+  getClosestStop(location) {
+    return this.state.stopsData.reduce((acc, cur) => {
+      // distance between driver and accumulator/current stop
+      const distanceAcc = Math.sqrt(Math.pow(acc.x - location.x, 2) + Math.pow(acc.y - location.y, 2));
+      const distanceCur = Math.sqrt(Math.pow(cur.x - location.x, 2) + Math.pow(cur.y - location.y, 2));
+      // if distances are exactly the same, it will return a stop closer to the final destination 
+      return distanceAcc < distanceCur ? acc : cur
+    }).name
+  }
+
+  getStopsArray(stops, firstStop) {
+    let relevantStops;
+    stops.forEach((stop, index) => {
+      if (stop.name === firstStop) {
+        relevantStops = this.state.stopsData.slice(index);
+      }
+    })
+    return relevantStops;
   }
 
   render() {

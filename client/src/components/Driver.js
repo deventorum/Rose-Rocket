@@ -68,7 +68,6 @@ class Driver extends Component {
     this.setState({ newProgress: event.target.value })
   }
   handleSelect(event) {
-    console.log(event.target);
     this.setState({ newLegID: event.target.value })
   }
   handleSubmit(event) {

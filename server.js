@@ -18,19 +18,6 @@ const data = {
 		'y': 55
 	}
 };
-// checks data validity from a client
-const checkDriverData = (leg, progress) => {
-	let output = false;
-	legsData.forEach(el => {
-		if (el.legID === leg) {
-			output = true;
-		}
-	});
-	if (progress > 100 || progress < 0 || isNaN(progress)) {
-		output = false;
-	}
-	return output;
-};
 
 const server = express()
 	.use(express.static('public'))
@@ -46,22 +33,30 @@ wss.on('connection', (ws) => {
 	ws.on('message', function incoming(incomingData) {
 		console.log('received: ', incomingData);
 		const newData = JSON.parse(incomingData);
-
-		const newLegID = newData.leg.toUpperCase();
-		const newProgress = parseInt(newData.progress, 10);
-
-		if (checkDriverData(newLegID, newProgress)) {
-			data.driverLocation = {
-				'activeLegID': newLegID,
-				'legProgress': newProgress
+		if (newData.type === 'updateDriver') {
+			if (newData.leg) {
+				const newLegID = newData.leg.toUpperCase();
+				const newProgress = parseInt(newData.progress, 10);
+				data.driverLocation = {
+					'activeLegID': newLegID,
+					'legProgress': newProgress
+				};
+				wss.clients.forEach(function each(client) {
+					client.send(JSON.stringify(data));
+				});
+			} else {
+				// sends an error message for react to render
+				ws.send(JSON.stringify({error: 'Please specify the leg'}));
+			}
+		}
+		if (newData.type === 'updateBonusDriver') {
+			data.bonusDriverLocation = {
+				'x': newData.x,
+				'y': newData.y
 			};
-	
 			wss.clients.forEach(function each(client) {
 				client.send(JSON.stringify(data));
 			});
-		} else {
-			// sends an error message for react to render
-			ws.send(JSON.stringify({error: 'Please specify the leg'}));
 		}
 	});
 	ws.on('close', () => {
