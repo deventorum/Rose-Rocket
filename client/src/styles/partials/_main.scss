@@ -112,3 +112,50 @@ canvas {
     }
   }
 }
+.update-driver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid $green;
+  transition: $trans;
+  padding: 20px;
+  margin: 20px;
+  max-width: 804px;
+
+  h2 {
+    color: $green;
+    transition: $trans;
+  }
+
+  &:hover {
+    border-color: $blue;
+
+    h2 {
+      color: $blue;
+    }
+  }
+
+  input {
+    min-width: 200px;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
+  }
+
+  input[type='submit'] {
+    
+    background-color: $green;
+    transition: $trans;
+
+    &:hover {
+      border: 1px solid black;
+      background-color: $blue;
+    }
+  }
+}
+.error-message {
+  font-weight: bold;
+  color: red;
+  margin: 10px 0;
+}

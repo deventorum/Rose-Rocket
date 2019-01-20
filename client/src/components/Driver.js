@@ -12,7 +12,8 @@ class Driver extends Component {
       legsData: [],
       driverLocation: {},
       newLegID: '',
-      newProgress: ''
+      newProgress: '',
+      error: ''
     }
     this.socket = null;
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,11 +27,15 @@ class Driver extends Component {
     }
     this.socket.onmessage = res => {
       const incomingData = JSON.parse(res.data);
-      this.setState({
-        stopsData: incomingData.stopsData,
-        legsData: incomingData.legsData,
-        driverLocation: incomingData.driverLocation
-      })
+      if (incomingData.error) {
+        this.setState({error: incomingData.error})
+      } else {
+        this.setState({
+          stopsData: incomingData.stopsData,
+          legsData: incomingData.legsData,
+          driverLocation: incomingData.driverLocation
+        })
+      }
     }
   }
   updateLeg(event) {
@@ -48,25 +53,25 @@ class Driver extends Component {
     }
     this.setState({
       newLegID: '',
-      newProgress: ''
+      newProgress: '',
+      error: ''
     })
     this.socket.send(JSON.stringify(driverLocation))
   }
   render() {
+    const errorMessage = this.state.error ? <p className='error-message'>{this.state.error}</p> : '';
     return (
       <div className="Driver">
         <Canvas stopsData={this.state.stopsData} legsData={this.state.legsData}driverLocation={this.state.driverLocation} updateDriver={this.updateDriver}  />
         <form onSubmit={this.handleSubmit} className='update-driver'>
-        <label>
-          New Leg ID
+          <h2>Update Driver's Location</h2>
+          <label>New Leg ID</label>
           <input type='text' name='legID' value={this.state.newLegID} onChange={this.updateLeg} maxLength='2'/>
-        </label>
-        <label>
-          Percentage Completed
+          <label>Percentage of the leg completed</label>
           <input type='text' name='progress' value={this.state.newProgress}
           onChange={this.updateProgress} maxLength='3'/>
-        </label>
           <input type='submit' value='Submit' />
+          {errorMessage}
         </form>
       </div>
     )

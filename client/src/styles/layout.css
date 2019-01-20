@@ -439,4 +439,64 @@ canvas:hover {
 .stops a:hover {
   color: black;
 }
+
+.update-driver {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  border: 2px solid #5EB7A9;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+  padding: 20px;
+  margin: 20px;
+  max-width: 804px;
+}
+
+.update-driver h2 {
+  color: #5EB7A9;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+
+.update-driver:hover {
+  border-color: #5090E2;
+}
+
+.update-driver:hover h2 {
+  color: #5090E2;
+}
+
+.update-driver input {
+  min-width: 200px;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+}
+
+.update-driver input[type='submit'] {
+  background-color: #5EB7A9;
+  -webkit-transition: all linear 0.25s;
+  transition: all linear 0.25s;
+}
+
+.update-driver input[type='submit']:hover {
+  border: 1px solid black;
+  background-color: #5090E2;
+}
+
+.error-message {
+  font-weight: bold;
+  color: red;
+  margin: 10px 0;
+}
 /*# sourceMappingURL=layout.css.map */

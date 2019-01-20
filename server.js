@@ -46,8 +46,6 @@ wss.on('connection', (ws) => {
 		const newLegID = newData.leg.toUpperCase();
 		const newProgress = parseInt(newData.progress, 10);
 
-		console.log(checkDriverData(newLegID, newProgress));
-
 		if (checkDriverData(newLegID, newProgress)) {
 			data.driverLocation = {
 				'activeLegID': newLegID,
@@ -57,6 +55,9 @@ wss.on('connection', (ws) => {
 			wss.clients.forEach(function each(client) {
 				client.send(JSON.stringify(data));
 			});
+		} else {
+			// sends an error message for react to render
+			ws.send(JSON.stringify({error: 'Invalid Input'}));
 		}
 	});
 	ws.on('close', () => {
