@@ -7,20 +7,17 @@ class Stops extends Component {
     stopsData: []
   };
   componentDidMount() {
-    this.callApi()
-      .then(res => {
-        this.setState({
-          stopsData: res
-         })
+    this.socket = new WebSocket('ws://localhost:5000/');
+    this.socket.onopen = function (event) {
+      console.log(`Client connection is now ${event.type}`);
+    }
+    this.socket.onmessage = res => {
+      const incomingData = JSON.parse(res.data)
+      this.setState({
+        stopsData: incomingData.stopsData
       })
-      .catch(err => console.log(err));
+    }
   }
-  callApi = async () => {
-    const response = await fetch('/stops/');
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  };
 
   render() {
     return (

@@ -9,18 +9,15 @@ class Legs extends Component {
     legsData: []
   };
   componentDidMount() {
-    this.callApi()
-      .then(res => {
-        this.setState({ legsData: res })
-      })
-      .catch(err => console.log(err));
+    this.socket = new WebSocket('ws://localhost:5000/');
+    this.socket.onopen = function (event) {
+      console.log(`Client connection is now ${event.type}`);
+    }
+    this.socket.onmessage = res => {
+      const incomingData = JSON.parse(res.data)
+      this.setState({legsData: incomingData.legsData})
+    }
   }
-  callApi = async () => {
-    const response = await fetch('/legs/');
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
-    return body;
-  };
   
   render() {
     const listOfLegs = 

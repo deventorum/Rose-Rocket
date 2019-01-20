@@ -1,46 +1,66 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const port = process.env.PORT || 5000;
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const SocketServer = require('ws').Server;
+
+const port = 5000;
 
 const legsData = require('./data-files/legs.json');
 const stopsData = require('./data-files/stops.json');
-const driverLocation = require('./data-files/driver-location.json');
 
-app.get('/', (req, res) => {
-	res.send({ express: 'Root' });
+const data = {
+	legsData: legsData,
+	stopsData: stopsData,
+	driverLocation: {
+		'activeLegID': 'FG',
+		'legProgress': 33
+	}
+};
+// checks data validity from a client
+const checkDriverData = (leg, progress) => {
+	let output = false;
+	legsData.forEach(el => {
+		if (el.legID === leg) {
+			output = true;
+		}
+	});
+	if (progress > 100 || progress < 0 || isNaN(progress)) {
+		output = false;
+	}
+	return output;
+};
+
+const server = express()
+	.use(express.static('public'))
+	.listen(port, '0.0.0.0', 'localhost', () => console.log(`Listening on ${port}`));
+
+const wss = new SocketServer({ server });
+
+wss.on('connection', (ws) => {
+	
+	ws.send(JSON.stringify(data));
+	console.log('newClient');
+
+	ws.on('message', function incoming(incomingData) {
+		console.log('received: ', incomingData);
+		const newData = JSON.parse(incomingData);
+
+		const newLegID = newData.leg.toUpperCase();
+		const newProgress = parseInt(newData.progress, 10);
+
+		console.log(checkDriverData(newLegID, newProgress));
+
+		if (checkDriverData(newLegID, newProgress)) {
+			data.driverLocation = {
+				'activeLegID': newLegID,
+				'legProgress': newProgress
+			};
+	
+			wss.clients.forEach(function each(client) {
+				client.send(JSON.stringify(data));
+			});
+		}
+	});
+	ws.on('close', () => {
+		console.log('Client disconnected');
+		
+	});
 });
-
-app.get('/legs/', (req, res) => {
-	res.send(legsData);
-});
-
-app.get('/stops/', (req, res) => {
-	res.send(stopsData);
-});
-
-app.get('/driver/', (req, res) => {
-	const data = {
-		legsData: legsData,
-		stopsData: stopsData,
-		driverLocation: driverLocation
-	};
-	res.send(data);
-});
-
-app.put('/driver/', (req, res) => {
-	console.log(req.body);
-	res.send(
-		`I received your PUT request. This is what you sent me: ${req.body}`,
-	);
-});
-
-// Bonus API
-app.get('/bonusdriver/', (req, res) => {
-	res.send({ express: 'Bonus Driver' });
-});
-
-
-app.listen(port, () => console.log(`Listening on port ${port}`));

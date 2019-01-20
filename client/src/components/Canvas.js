@@ -16,10 +16,14 @@ class Canvas extends Component {
     });
   }
   componentDidUpdate() {
+    // clears canvas 
+    const ctx = this.refs.canvas.getContext('2d');
+    ctx.clearRect(0,0,800,800);
+
     this.displayLegs(this.state.stopsData, '#5090E2', 1);
     if (this.state.driverLocation){
       let relevantStops;
-      const lastStop = this.getLastStop(this.state.driverLocation[0]);
+      const lastStop = this.getLastStop(this.state.driverLocation);
       this.state.stopsData.forEach((stop, index) => {
         if (stop.name === lastStop) {
           relevantStops = this.state.stopsData.slice(index);
@@ -27,7 +31,7 @@ class Canvas extends Component {
       })
       // only shows last stop driver visited and stops he is going to visit
       this.displayStops(relevantStops);
-      this.displayDriver(this.state.driverLocation[0]);
+      this.displayDriver(this.state.driverLocation);
     } else {
       this.displayStops(this.state.stopsData);
     }
@@ -103,6 +107,7 @@ class Canvas extends Component {
     ctx.fillStyle = '#5090E2';
     ctx.fill();
     ctx.stroke();
+    ctx.beginPath();
     ctx.font = '15px serif';
     ctx.fillStyle = '#5090E2';
     ctx.fillText('Driver', xDriver + 5, yDriver - 10);
@@ -142,14 +147,14 @@ class Canvas extends Component {
   }
   showLegend(color, lineWidth) {
     const ctx = this.refs.canvas.getContext('2d');
-    ctx.moveTo(5 * this.state.sizeMultiplier, 125 * this.state.sizeMultiplier);
-    ctx.lineTo(15 * this.state.sizeMultiplier, 125 * this.state.sizeMultiplier);
+    ctx.moveTo(5 * this.state.sizeMultiplier, 115 * this.state.sizeMultiplier);
+    ctx.lineTo(15 * this.state.sizeMultiplier, 115 * this.state.sizeMultiplier);
     ctx.strokeStyle = color;
     ctx.lineWidth = lineWidth;
     ctx.stroke();
     ctx.font = '15px serif';
     ctx.fillStyle = color;
-    ctx.fillText('Completed section', 16 * this.state.sizeMultiplier, 126 * this.state.sizeMultiplier);
+    ctx.fillText('Completed section', 16 * this.state.sizeMultiplier, 116 * this.state.sizeMultiplier);
   }
 
   render() {
