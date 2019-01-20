@@ -231,7 +231,6 @@ template {
 }
 
 /* COLORS */
-/* FONTS */
 /* TRANSITION */
 /* BORDER RADIUS */
 h1,
@@ -462,6 +461,11 @@ canvas:hover {
   max-width: 804px;
 }
 
+.update-driver label {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
 .update-driver h2 {
   color: #5EB7A9;
   -webkit-transition: all linear 0.25s;
@@ -476,11 +480,49 @@ canvas:hover {
   color: #5090E2;
 }
 
+.update-driver select {
+  margin: 0 0 10px;
+  min-width: 200px;
+  height: 40px;
+}
+
 .update-driver input {
   min-width: 200px;
   margin: 10px 0;
   padding: 10px;
   text-align: center;
+}
+
+.update-driver .slider {
+  -webkit-appearance: none;
+  max-width: 500px;
+  height: 25px;
+  background: #5EB7A9;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  -webkit-transition: opacity .2s;
+  transition: opacity .2s;
+}
+
+.update-driver .slider:hover {
+  opacity: 1;
+}
+
+.update-driver .slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #5090E2;
+  cursor: pointer;
+}
+
+.update-driver .slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #5090E2;
+  cursor: pointer;
 }
 
 .update-driver input[type='submit'] {

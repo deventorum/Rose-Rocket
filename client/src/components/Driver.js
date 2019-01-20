@@ -3,6 +3,32 @@ import React, { Component } from 'react';
 
 import Canvas from './Canvas';
 
+const SelectComponent = (props) => (
+  <select name={props.name}
+    onChange={props.handleSelect}
+    value={props.value}
+  >
+    <Option
+      name='Select'
+      value=''
+      text='Select Leg ID'
+    />
+    {props.legs.map((leg, index) => <Option
+      key={index}
+      name={leg.legID}
+      value={leg.legID}
+      text={leg.legID}
+      handleSelect={props.handleSelect}
+    />
+    )}
+  </select>
+);
+
+const Option = (props) => (
+  <option
+    value={props.value}
+  >{props.text}</option>
+)
 
 class Driver extends Component {
   constructor() {
@@ -12,13 +38,13 @@ class Driver extends Component {
       legsData: [],
       driverLocation: {},
       newLegID: '',
-      newProgress: '',
+      newProgress: '0',
       error: ''
     }
     this.socket = null;
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.updateLeg = this.updateLeg.bind(this);
     this.updateProgress = this.updateProgress.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:5000/');
@@ -38,11 +64,12 @@ class Driver extends Component {
       }
     }
   }
-  updateLeg(event) {
-    this.setState({newLegID: event.target.value})
-  }
   updateProgress(event) {
     this.setState({ newProgress: event.target.value })
+  }
+  handleSelect(event) {
+    console.log(event.target);
+    this.setState({ newLegID: event.target.value })
   }
   handleSubmit(event) {
     event.preventDefault();
@@ -53,23 +80,29 @@ class Driver extends Component {
     }
     this.setState({
       newLegID: '',
-      newProgress: '',
+      newProgress: '0',
       error: ''
     })
     this.socket.send(JSON.stringify(driverLocation))
   }
   render() {
     const errorMessage = this.state.error ? <p className='error-message'>{this.state.error}</p> : '';
+
     return (
       <div className="Driver">
         <Canvas stopsData={this.state.stopsData} legsData={this.state.legsData}driverLocation={this.state.driverLocation} updateDriver={this.updateDriver}  />
         <form onSubmit={this.handleSubmit} className='update-driver'>
           <h2>Update Driver's Location</h2>
-          <label>New Leg ID</label>
-          <input type='text' name='legID' value={this.state.newLegID} onChange={this.updateLeg} maxLength='2'/>
+          <SelectComponent
+            name="newLeg"
+            legs={this.state.legsData}
+            value={this.state.newLegID}
+            handleSelect={this.handleSelect}
+          />
           <label>Percentage of the leg completed</label>
-          <input type='text' name='progress' value={this.state.newProgress}
-          onChange={this.updateProgress} maxLength='3'/>
+          <input className='slider' type='range' name='progress' min='0' max='100' value={this.state.newProgress}
+          onChange={this.updateProgress}/>
+          <p>{this.state.newProgress} %</p>
           <input type='submit' value='Submit' />
           {errorMessage}
         </form>

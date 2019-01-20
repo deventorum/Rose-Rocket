@@ -57,7 +57,7 @@ wss.on('connection', (ws) => {
 			});
 		} else {
 			// sends an error message for react to render
-			ws.send(JSON.stringify({error: 'Invalid Input'}));
+			ws.send(JSON.stringify({error: 'Please specify the leg'}));
 		}
 	});
 	ws.on('close', () => {
