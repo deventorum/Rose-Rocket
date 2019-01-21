@@ -21,19 +21,15 @@ class Canvas extends Component {
     // clears canvas 
     const ctx = this.refs.canvas.getContext('2d');
     ctx.clearRect(0,0,800,800);
-
     this.displayLegs(this.state.stopsData, '#5090E2', 1);
     let relevantStops;
     if (this.state.driverLocation){
       // only shows last stop driver visited and stops he is going to visit
       relevantStops = this.getStopsArray(this.state.stopsData, this.getLastStop(this.state.driverLocation));
       this.displayDriver(this.state.driverLocation);
-
     } else if (this.state.bonusDriverLocation) {
-
       relevantStops = this.getStopsArray(this.state.stopsData, this.getClosestStop(this.state.bonusDriverLocation));
       this.displayBonusDriver(this.state.bonusDriverLocation)
-
     } else {
       relevantStops = this.state.stopsData;
     }

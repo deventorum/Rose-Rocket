@@ -7,7 +7,6 @@
     "dev": "concurrently - kill-others \"npm run server\" \"npm run client\""
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "nodemon": "^1.18.9",
     "ws": "^6.1.2"
